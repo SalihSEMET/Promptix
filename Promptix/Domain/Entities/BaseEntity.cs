@@ -1,6 +1,8 @@
-﻿namespace Domain.Entities;
+﻿using Domain.Interfaces;
 
-public abstract class BaseEntity
+namespace Domain.Entities;
+
+public abstract class BaseEntity : IBaseEntity
 {
     public int Id { get; set; }
     public DateTime CreatedDate { get; set; } = DateTime.Now;
