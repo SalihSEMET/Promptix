@@ -1,6 +1,8 @@
-﻿namespace Domain.Entities;
+﻿using Microsoft.AspNetCore.Identity;
 
-public class AppRole
+namespace Domain.Entities;
+
+public class AppRole : IdentityRole<int>
 {
     
 }

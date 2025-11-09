@@ -2,7 +2,7 @@
 
 namespace Domain.Entities;
 
-public class Payments : BaseEntity
+public class Payment : BaseEntity
 {
     public decimal       Amount { get; set; }
     public string        TransactionId { get; set; } = "";
