@@ -4,6 +4,8 @@ namespace Domain.Entities;
 
 public class AppUser : IdentityUser<int>
 {
+    public string FirstNameLastName { get; set; } = "";
+
     // Navigation Properties
     public ICollection<Subscription> Subscriptions { get; set; }
     public ICollection<Purchase> Purchases { get; set; }
