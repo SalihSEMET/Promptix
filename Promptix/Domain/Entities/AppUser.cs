@@ -6,6 +6,7 @@ public class AppUser : IdentityUser<int>
 {
     public string FirstNameLastName { get; set; } = "";
 
+    public string Address { get; set; } = "";
     // Navigation Properties
     public ICollection<Subscription> Subscriptions { get; set; }
     public ICollection<Purchase> Purchases { get; set; }
