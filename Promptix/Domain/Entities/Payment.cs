@@ -8,4 +8,6 @@ public class Payment : BaseEntity
     public string        TransactionId { get; set; } = "";
     public DateTime      PaymentDate { get; set; }
     public PaymentStatus Status { get; set; } = PaymentStatus.Pending;
+    //Navigation Properties
+    public ICollection<Purchase> Purchases { get; set; }
 }

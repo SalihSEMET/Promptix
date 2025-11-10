@@ -10,5 +10,6 @@ public class AuditLog : BaseEntity
     public string? NewValues { get; set; }
     public string? IpAddress { get; set; }
     public string? UserAgent { get; set; }
-    
+    //Navigation Properties
+    public AppUser AppUser { get; set; }
 }
