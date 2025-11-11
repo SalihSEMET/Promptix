@@ -6,18 +6,20 @@ namespace Infrastructure.Data;
 
 public class PromptixDbContext : IdentityDbContext<AppUser,AppRole,int>
 {
+    //Our Working Method While Performing Configuration Operations
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlServer(
-            "Server=SQLEXPRESS;Database=PromptixDB;Trusted_Connection=True;"
+            "Server=.;Database=PromptixDB;Trusted_Connection=True;"
             );
         base.OnConfiguring(optionsBuilder);
     }
+    //Our structure connects to the database from within the application and runs the models as tables.
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        
         base.OnModelCreating(builder);
     }
+    //DBSet = Table
     public DbSet<AuditLog> AuditLogs{ get; set; }
     public DbSet<Category> Categories{ get; set; }
     public DbSet<Favorite> Favorites{ get; set; }
