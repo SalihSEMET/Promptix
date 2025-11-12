@@ -13,7 +13,7 @@ public interface IRepository<T> where T : class, IBaseEntity, new()
     Task<IEnumerable<T>> FindAsync(Expression<Func<T,bool>> predicate);
     Task AddAsync(T entity);
     Task AddRangeAsync(IEnumerable<T> entities);
-    Task Update(T entity);
-    Task Remove(T entity);
-    Task RemoveRangeAsync(IEnumerable<T> entities);
+    void Update(T entity);
+    void Remove(T entity);
+    void RemoveRangeAsync(IEnumerable<T> entities);
 }
