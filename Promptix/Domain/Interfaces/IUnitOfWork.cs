@@ -13,4 +13,7 @@ public interface IUnitOfWork
     public IRepository<AuditLog> AuditLogs { get; set; }
     public IRepository<PromptCategory> PromptCategories { get; set; }
     Task<int> CompleteAsync();
+    Task BeginTransactionAsync();
+    Task CommitTransactionAsync();
+    Task RollbackTransactionAsync();
 }
