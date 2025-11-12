@@ -10,7 +10,7 @@ public class PromptixDbContext : IdentityDbContext<AppUser,AppRole,int>
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlServer(
-            "Server=.;Database=PromptixDB;Trusted_Connection=True;"
+            "Server=.\\SQLEXPRESS;Database=PromptixDB;Trusted_Connection=True;TrustServerCertificate=true"
             );
         base.OnConfiguring(optionsBuilder);
     }
