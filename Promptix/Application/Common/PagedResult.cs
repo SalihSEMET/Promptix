@@ -1,0 +1,21 @@
+﻿namespace Application.Common;
+
+public class PagedResult<T> : Result<IEnumerable<T>>
+{
+    public int PageIndex { get; set; }
+    public int PageSize { get; set; }
+    public int TotalCount { get; set; }
+
+    public static PagedResult<T> Create(IEnumerable<T> data, int totalCount, int pageIndex, int pageSize)
+    {
+        return new PagedResult<T>
+        {
+            TotalCount = totalCount,
+            PageIndex = pageIndex,
+            PageSize = pageSize,
+            Success = true,
+            Data = data
+        };
+    }
+    
+}
