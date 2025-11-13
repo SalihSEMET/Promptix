@@ -7,33 +7,48 @@ namespace Infrastructure.Repositories;
 
 public class UnitOfWork : IUnitOfWork
 {
-    private readonly PromptixDbContext DbContext;
-    private IDbContextTransaction? Transaction;
-    public IRepository<Prompt> Prompts { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-    public IRepository<Category> Categories { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-    public IRepository<Favorite> Favorites { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-    public IRepository<Payment> Payments { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-    public IRepository<Purchase> Purchases { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-    public IRepository<Subscription> Subscriptions { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-    public IRepository<AuditLog> AuditLogs { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-    public IRepository<PromptCategory> PromptCategories { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-    public Task<int> CompleteAsync()
+    private readonly PromptixDbContext _dbContext;
+    private IDbContextTransaction? _transaction;
+    public IRepository<Prompt> prompts;
+    public IRepository<Category> categories;
+    public IRepository<Favorite> favorites;
+    public IRepository<Payment> payments;
+    public IRepository<Purchase> purchases;
+    public IRepository<Subscription> subscriptions;
+    public IRepository<AuditLog> auditLogs;
+    public IRepository<PromptCategory> promptCategories;
+    public UnitOfWork(PromptixDbContext context)
     {
-        throw new NotImplementedException();
+        _dbContext = context;
     }
-
-    public Task BeginTransactionAsync()
+    public IRepository<Prompt> Prompts => prompts;
+    public IRepository<Category> Categories => categories;
+    public IRepository<Favorite> Favorites => favorites;
+    public IRepository<Payment> Payments => payments;
+    public IRepository<Purchase> Purchases => purchases;
+    public IRepository<Subscription> Subscriptions => subscriptions;
+    public IRepository<AuditLog> AuditLogs => auditLogs;
+    public IRepository<PromptCategory> PromptCategories => promptCategories;
+    public async Task<int> CompleteAsync() => await _dbContext.SaveChangesAsync();
+    public async Task BeginTransactionAsync() => _transaction = await _dbContext.Database.BeginTransactionAsync();
+    public async Task CommitTransactionAsync()
     {
-        throw new NotImplementedException();
+        if (_transaction == null) return;
+        await _dbContext.SaveChangesAsync();
+        await _transaction.CommitAsync();
+        await _transaction.DisposeAsync();
+        _transaction = null;
     }
-
-    public Task CommitTransactionAsync()
+    public async Task RollbackTransactionAsync()
     {
-        throw new NotImplementedException();
+        if (_transaction == null) return;
+        await _transaction.RollbackAsync();
+        await _transaction.DisposeAsync();
+        _transaction = null;
     }
-
-    public Task RollbackTransactionAsync()
+    public void Dispose()
     {
-        throw new NotImplementedException();
+        _transaction?.Dispose();
+        _dbContext.Dispose();
     }
 }
