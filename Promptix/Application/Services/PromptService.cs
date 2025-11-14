@@ -21,11 +21,22 @@ public class PromptService(IUnitOfWork unitOfWork) : IPromptService
         return Result<IEnumerable<PromptDto>>.Ok(result);
     }
 
-    public Task<Result<PromptDto>> GetByIdAsync(int id)
+    public async Task<Result<PromptDto>> GetByIdAsync(int id)
     {
-        throw new NotImplementedException();
+        var prompt = await unitOfWork.Prompts.GetByIdAsync(id);
+        if (prompt == null)
+            return Result<PromptDto>.Fail("Prompt Not Found");
+        var dto = new PromptDto()
+        {
+            Id = prompt.Id,
+            Title = prompt.Title,
+            Description = prompt.Description,
+            Price = prompt.Price
+        };
+        await unitOfWork.CompleteAsync();
+        return Result<PromptDto>.Ok(dto);
     }
-
+    
     public async Task<Result<PromptDto>> CreateAsync(PromptDto promptDto)
     {
         var prompt = new Prompt
@@ -39,14 +50,27 @@ public class PromptService(IUnitOfWork unitOfWork) : IPromptService
         promptDto.Id = prompt.Id;
         return Result<PromptDto>.Ok(promptDto, "Prompt Created Successfully");
     }
-
-    public Task<Result<PromptDto>> UpdateAsync(PromptDto promptDto)
+    public async Task<Result<PromptDto>> UpdateAsync(int id,PromptDto promptDto)
     {
-        throw new NotImplementedException();
+        var prompt = await unitOfWork.Prompts.GetByIdAsync(id);
+        if (prompt == null)
+            return Result<PromptDto>.Fail("Prompt Not Fount");
+        prompt.Title = promptDto.Title;
+        prompt.Description = promptDto.Description;
+        prompt.Price = promptDto.Price;
+        prompt.UpdatedDate = DateTime.Now;
+        unitOfWork.Prompts.Update(prompt);
+        await unitOfWork.CompleteAsync();
+        return Result<PromptDto>.Ok(promptDto, "Prompt Update Successfully");
     }
-
-    public Task<Result<PromptDto>> DeleteAsync(PromptDto promptDto)
+    
+    public async Task<Result<bool>> DeleteAsync(int id)
     {
-        throw new NotImplementedException();
+        var prompt = await unitOfWork.Prompts.GetByIdAsync(id);
+        if (prompt == null)
+            return Result<bool>.Fail("Prompt Not Found");
+        unitOfWork.Prompts.Remove(prompt);
+        await unitOfWork.CompleteAsync();
+        return Result<bool>.Ok(true, "Prompt Deleted");
     }
 }
