@@ -5,9 +5,9 @@ namespace Domain.Entities;
 public abstract class BaseEntity : IBaseEntity
 {
     public int       Id { get; set; }
-    public DateTime  CreatedDate { get; set; } = DateTime.Now;
+    public DateTime  CreatedDate { get; set; }
     public DateTime? UpdatedDate { get; set; } // null
-    public bool      IsActive { get; set; } = true;
+    public bool      IsActive { get; set; }
 }
 //                         DATABASE TABLES  
 // Users         : User Information, roles, subscription status
