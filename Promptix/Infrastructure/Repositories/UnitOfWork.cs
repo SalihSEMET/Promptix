@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Infrastructure.Repositories;
 
-public class UnitOfWork : IUnitOfWork
+public class UnitOfWork : IUnitOfWork,IDisposable
 {
     private readonly PromptixDbContext _dbContext;
     private IDbContextTransaction? _transaction;
