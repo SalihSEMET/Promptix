@@ -10,7 +10,6 @@ public interface IUnitOfWork
     public IRepository<Payment> Payments { get;}
     public IRepository<Purchase> Purchases { get;}
     public IRepository<Subscription> Subscriptions { get;}
-    public IRepository<AuditLog> AuditLogs { get;}
     public IRepository<PromptCategory> PromptCategories { get;}
     Task<int> CompleteAsync();
     Task BeginTransactionAsync();

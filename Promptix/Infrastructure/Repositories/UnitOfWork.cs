@@ -15,7 +15,6 @@ public class UnitOfWork : IUnitOfWork,IDisposable
     public IRepository<Payment> payments;
     public IRepository<Purchase> purchases;
     public IRepository<Subscription> subscriptions;
-    public IRepository<AuditLog> auditLogs;
     public IRepository<PromptCategory> promptCategories;
     public UnitOfWork(PromptixDbContext context)
     {
@@ -27,7 +26,6 @@ public class UnitOfWork : IUnitOfWork,IDisposable
     public IRepository<Payment> Payments => payments;
     public IRepository<Purchase> Purchases => purchases;
     public IRepository<Subscription> Subscriptions => subscriptions;
-    public IRepository<AuditLog> AuditLogs => auditLogs;
     public IRepository<PromptCategory> PromptCategories => promptCategories;
     public async Task<int> CompleteAsync() => await _dbContext.SaveChangesAsync();
     public async Task BeginTransactionAsync() => _transaction = await _dbContext.Database.BeginTransactionAsync();
