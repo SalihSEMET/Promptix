@@ -29,7 +29,7 @@ public class Repository<T> : IRepository<T> where T : class,IBaseEntity, new()
         
         query = orderBy == OrderType.Asc ? query.OrderBy(x => x.Id) : query.OrderByDescending(x => x.Id);
         
-        return await DbSet.ToListAsync();
+        return await query.ToListAsync();
     }
 
     public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate,OrderType orderBy = OrderType.Asc,params string[] include)
@@ -42,7 +42,7 @@ public class Repository<T> : IRepository<T> where T : class,IBaseEntity, new()
         }
         query = orderBy == OrderType.Asc ? query.OrderBy(x => x.Id) : query.OrderByDescending(x => x.Id);
         
-        return await DbSet.ToListAsync(); //The query is sent to the database, executed, and the results are returned.
+        return await query.ToListAsync(); //The query is sent to the database, executed, and the results are returned.
     }
     public async Task AddAsync(T entity) => await DbSet.AddAsync(entity);
     public async Task AddRangeAsync(IEnumerable<T> entities) => await DbSet.AddRangeAsync(entities);
