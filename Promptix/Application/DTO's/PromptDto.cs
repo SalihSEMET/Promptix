@@ -1,4 +1,6 @@
-﻿namespace Application.DTO_s;
+﻿using Domain.Entities;
+
+namespace Application.DTO_s;
 
 public class PromptDto
 {
@@ -8,4 +10,5 @@ public class PromptDto
     public string Description { get; set; } = string.Empty;
     public string CategoryName { get; set; } = string.Empty;
     public decimal Price { get; set; }
+    public List<CategoryDto> Categories { get; set; }
 }
