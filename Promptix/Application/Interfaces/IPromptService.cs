@@ -1,12 +1,19 @@
-﻿using Application.DTO_s;
-using Application.Common;
-namespace Application.Interfaces;
+﻿using Application.Common;
+using Application.DTOs;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-public interface IPromptService
+namespace Application.Interfaces
 {
-    Task<Result<IEnumerable<PromptDto>>> GetAllAsync();
-    Task<Result<PromptDto>> GetByIdAsync(int id);
-    Task<Result<PromptDto>> CreateAsync(PromptDto promptDto);
-    Task<Result<PromptDto>> UpdateAsync(int id,PromptDto promptDto);
-    Task<Result<bool>> DeleteAsync(int id);
+    public interface IPromptService
+    {
+        Task<Result<IEnumerable<PromptDTO>>> GetAllAsync();
+        Task<Result<PromptDTO>> GetByIdAsync(int id);
+        Task<Result<PromptDTO>> CreateAsync(PromptDTO promptDTO);
+        Task<Result<PromptDTO>> UpdateAsync(int id,PromptDTO promptDTO);
+        Task<Result<bool>> DeleteAsync(int id);
+    }
 }
