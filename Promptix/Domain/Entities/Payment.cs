@@ -1,13 +1,22 @@
 ﻿using Domain.Enums;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Domain.Entities;
-
-public class Payment : BaseEntity
+namespace Domain.Entities
 {
-    public decimal       Amount { get; set; }
-    public string        TransactionId { get; set; } = "";
-    public DateTime      PaymentDate { get; set; }
-    public PaymentStatus Status { get; set; } = PaymentStatus.Pending;
-    //Navigation Properties
-    public ICollection<Purchase> Purchases { get; set; }
+    public class Payment:BaseEntity
+    {
+        public decimal Amount { get; set; }
+        public string TransactionId { get; set; }
+        public DateTime PaymentDate { get; set; }
+        public PaymentStatus Status { get; set; } = PaymentStatus.Pending;
+
+
+        // Navigation Properties
+        public ICollection<Purchase> Purchases { get; set; }
+
+    }
 }

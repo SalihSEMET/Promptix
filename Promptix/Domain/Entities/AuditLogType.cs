@@ -1,7 +1,14 @@
-﻿namespace Domain.Entities;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-public class AuditLogType : BaseEntity
+namespace Domain.Entities
 {
-    public string? LogTypeName { get; set; }
-    public ICollection<AuditLog> AuditLogs { get; set; }
+    public class AuditLogType:BaseEntity
+    {
+        public string LogTypeName { get; set; }
+        public ICollection<AuditLog> AuditLogs { get; set; }
+    }
 }

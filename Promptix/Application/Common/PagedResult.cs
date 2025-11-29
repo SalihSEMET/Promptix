@@ -1,21 +1,30 @@
-﻿namespace Application.Common;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-public class PagedResult<T> : Result<IEnumerable<T>>
+namespace Application.Common
 {
-    public int PageIndex { get; set; }
-    public int PageSize { get; set; }
-    public int TotalCount { get; set; }
-
-    public static PagedResult<T> Create(IEnumerable<T> data, int totalCount, int pageIndex, int pageSize)
+    public class PagedResult<T>:Result<IEnumerable<T>>
     {
-        return new PagedResult<T>
+        public int PageIndex { get; set; }
+        public int PageSize { get; set; }
+        public int TotalCount { get; set; }
+
+        public static PagedResult<T> Create(IEnumerable<T> data, int totalCount,int pageIndex,int pageSize)
         {
-            TotalCount = totalCount,
-            PageIndex = pageIndex,
-            PageSize = pageSize,
-            Success = true,
-            Data = data
-        };
+            return new PagedResult<T>
+            {
+                TotalCount = totalCount,
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                Success = true,
+                Data = data
+
+            };
+        }
+
+
     }
-    
 }

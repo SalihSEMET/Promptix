@@ -1,7 +1,14 @@
-﻿namespace Domain.Enums;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-public enum RoleType
+namespace Domain.Enums
 {
-    Admin = 1,
-    UserApp
+    public enum RoleType
+    {
+        Admin = 1,
+        UserApp
+    }
 }

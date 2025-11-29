@@ -1,8 +1,17 @@
-﻿namespace Domain.Entities;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-public class Category : BaseEntity
+namespace Domain.Entities
 {
-    public string Name { get; set; } = "";
-    //Navigation Properties
-    public ICollection<PromptCategory> PromptCategories { get; set; }
+    public class Category : BaseEntity
+    {
+        public string Name { get; set; }
+
+
+        // Navigation Properties
+        public ICollection<PromptCategory> PromptCategories { get; set; }
+    }
 }

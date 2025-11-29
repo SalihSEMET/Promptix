@@ -1,20 +1,38 @@
 ﻿using Domain.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection.Metadata;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Domain.Entities;
-
-public abstract class BaseEntity : IBaseEntity
+namespace Domain.Entities
 {
-    public int       Id { get; set; }
-    public DateTime  CreatedDate { get; set; }
-    public DateTime? UpdatedDate { get; set; } // null
-    public bool      IsActive { get; set; }
+    //Entitylerin temeli, yani bütün entitylerin kalıtım aldığı en temel class. İçerisindeki özellikler ise bütün entitylerde bulunması gereken ve kalıtım yoluya aktarılacak olan özellikler.
+    public abstract class BaseEntity : IBaseEntity
+    {
+        public int Id { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
+        public bool IsActive { get; set; }
+
+
+        // Core + Entity            = Domain
+        // DataAccess               = Infrastructure
+        // Business Logic           = Application
+        // API + UI(User Interface) = Presentation(Sunum)
+
+
+        //VERİTABANINDAKİ TABLOLARIMIZ
+        //-----------------------------------------------------------------------------------
+
+        // Users          : Kullanıcı bilgileri, roller, abonelik durumu
+        // Prompts        : Prompt içeriği, kategori, açıklama, fiyat
+        // Categories     : Prompt kategorileri(“Tasarım”, “Yazılım”, “Blog İçeriği” vb.)
+        // Purchases      : Kullanıcı hangi promptu satın almış, tarih ve ödeme bilgisi
+        // Subscriptions  : Kullanıcının abonelik tipi, başlangıç ve bitiş tarihi
+        // Payments Ödeme : Ödeme kayıtları(mock ya da gerçek gateway entegrasyonu)
+        // Favorites      : Kullanıcının favoriye eklediği promptlar
+        // AuditLogs      : Loglama, işlem geçmişi
+    }
 }
-//                         DATABASE TABLES  
-// Users         : User Information, roles, subscription status
-// Prompts       : Prompt content, category, description, price
-// Categories    : Prompt Categories ("Design","Software","Blog Content" and similar)
-// Purchases     : Which Prompt Did the User Purchase, Date and Payment Information
-// Subscriptions : User's Subscription Type, Start and End Date
-// Payments      : Payment Records (mock or real gateway integration)
-// Favorites     : User Favorite Prompts
-// AuditLogs     : Logging Transaction History

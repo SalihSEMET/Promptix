@@ -1,11 +1,19 @@
-﻿namespace Domain.Enums;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-public enum LogType
+namespace Domain.Enums
 {
-    Success = 1,
-    Warning,
-    Error,
-    Information,
-    NotFound,
-    NonValidation
+    public enum LogType
+    {
+        Success = 1,
+        Warning,
+        Error,
+        Information,
+        NotFound,
+        NonValidation
+
+    }
 }

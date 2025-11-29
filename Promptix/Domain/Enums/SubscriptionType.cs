@@ -1,7 +1,14 @@
-﻿namespace Domain.Enums;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-public enum SubscriptionType
+namespace Domain.Enums
 {
-    Monthly = 1,
-    Yearly = 2
+    public enum SubscriptionType
+    {
+        Monthly = 1,
+        Yearly = 2
+    }
 }

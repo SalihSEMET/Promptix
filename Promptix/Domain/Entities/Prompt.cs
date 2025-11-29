@@ -1,13 +1,24 @@
-﻿namespace Domain.Entities;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-public class Prompt : BaseEntity
+namespace Domain.Entities
 {
-    public string   Title { get; set; } = "";
-    public string   Description { get; set; } = "";
-    public string   Content { get; set; } = "";
-    public decimal  Price { get; set; }
-    //Navigation Properties
-    public ICollection<Purchase> Purchases { get; set; }
-    public ICollection<Favorite> Favorites { get; set; }
-    public ICollection<PromptCategory> PromptCategories { get; set; }
+    public class Prompt : BaseEntity
+    {
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public string Content { get; set; } // Asıl Prompt İçeriği
+        public decimal Price { get; set; }
+
+
+        // Navigation Properties
+        public ICollection<Purchase> Purchases { get; set; }
+        public ICollection<Favorite> Favorites { get; set; }
+        public ICollection<PromptCategory> PromptCategories { get; set; }
+
+
+    }
 }

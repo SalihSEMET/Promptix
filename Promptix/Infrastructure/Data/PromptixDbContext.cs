@@ -1,78 +1,92 @@
-﻿using System.Linq.Expressions;
-using System.Reflection;
-using Domain.Entities;
+﻿using Domain.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Infrastructure.Data;
-
-public class PromptixDbContext : IdentityDbContext<AppUser,AppRole,int>
+namespace Infrastructure.Data
 {
-    //Our Working Method While Performing Configuration Operations
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    public class PromptixDbContext : IdentityDbContext<AppUser,AppRole,int>
     {
-        optionsBuilder.UseSqlServer(
-            "Server=.\\SQLEXPRESS;Database=PromptixDB;Trusted_Connection=True;TrustServerCertificate=true"
-            );
-        base.OnConfiguring(optionsBuilder);
-    }
-    //Our structure connects to the database from within the application and runs the models as tables.
-    protected override void OnModelCreating(ModelBuilder builder)
-    {
-        //It finds all the configurations we defined in the configuration folder and applies them one by one.
-        var configuration = Assembly.GetExecutingAssembly();
-        builder.ApplyConfigurationsFromAssembly(configuration);
-        //Returns All Entities Inheriting from the Base Entity
-        foreach (var item in builder.Model.GetEntityTypes().Where(t=>typeof(Domain.Entities.BaseEntity).IsAssignableFrom(t.ClrType)))
+        //Konfigürasyon İşlemleri Yapılırken Çalışan Methodumuz
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //When retrieving data from the database, it only retrieves data whose IsActive column is 1 and true.
-            var parameters = Expression.Parameter(item.ClrType, "e");
-            var prop = Expression.Property(parameters, nameof(BaseEntity.IsActive));
-            var condition = Expression.Equal(prop, Expression.Constant(true));
-            var lambda = Expression.Lambda(condition, parameters);
-            builder.Entity(item.ClrType).HasQueryFilter(lambda);
-            //var prompt = await __dbContext.Prompts.ToListAsync() == Select * from where IsActive = 1
+            optionsBuilder.UseSqlServer("Server=.;Database=PromptixDB;Trusted_Connection=True;TrustServerCertificate=true");
+            base.OnConfiguring(optionsBuilder);
         }
-        //First, the indexing process was done according to two columns, that is, the sorting process was done, and then both columns were defined as Unique. That is, the user cannot add the same prompt to their favorites twice.
-        builder.Entity<Favorite>().HasIndex(f => new
-        {
-            f.AppUserId,
-            f.PromptId
-        }).IsUnique();
-        builder.Entity<Purchase>().HasIndex(x => new
-        {
-            x.AppUserId,
-            x.PromptId,
-            x.PurchaseDate
-        });
-        base.OnModelCreating(builder);
-    }
-    //When a new entity is added, we set the date to the current date. If the entity is updated, we update the update date to the current date.
-    //By overriding the Save Changes Method, we enter the save queue and perform the operations we want to do. If new data is to be added according to our controls, we set the insertion date to today's date and change the value of the IsActive Column to true. If the data is to be changed, i.e. updated, we set the updateDate value to the time of day.
-    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-    {
-        //ChangeTracker.Entries<BaseEntity>() : Follows Entity
-        var entries = ChangeTracker.Entries<BaseEntity>();
-        foreach (var item in entries)
-        {
-            if (item.State == EntityState.Added)
-            {
-                item.Entity.CreatedDate = DateTime.Now;
-                item.Entity.IsActive = true;
-            }
-            if (item.State == EntityState.Modified)
-                item.Entity.UpdatedDate = DateTime.Now;
-        }
-        return base.SaveChangesAsync(cancellationToken);
-    }
 
-    //DBSet = Table
-    public DbSet<AuditLog> AuditLogs{ get; set; }
-    public DbSet<Category> Categories{ get; set; }
-    public DbSet<Favorite> Favorites{ get; set; }
-    public DbSet<Payment> Payments { get; set; }
-    public DbSet<Prompt> Prompts { get; set; }
-    public DbSet<PromptCategory> PromptCategories { get; set; }
-    public DbSet<Purchase> Purchases { get; set; }
-    public DbSet<Subscription> Subscriptions { get; set; }
+        //Uygulama içerisinden veritabanına bağlanıp, modellerin tablo olarak oluşturulurken çalıştığı yapımız.
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            //Configurations klasörü içerisindeki bütün tanımladığımız konfigurasyonları bulur ve teker teker uygular.
+            var configurationAssembly = Assembly.GetExecutingAssembly();
+            builder.ApplyConfigurationsFromAssembly(configurationAssembly);
+
+
+            //BaseEntity den kalıtım alan bütün Entityleri döner
+            foreach (var item in builder.Model.GetEntityTypes().Where(t=> typeof(BaseEntity).IsAssignableFrom(t.ClrType)))
+            {
+
+                //Veritabanından veri çekerken default olarak yani varsayılan olarak sadece IsActive kolonu 1 olan yani true olanları yani Aktif olan verileri çeker.
+                var parameter = Expression.Parameter(item.ClrType, "e");
+                var prop = Expression.Property(parameter, nameof(BaseEntity.IsActive));
+                var condition = Expression.Equal(prop, Expression.Constant(true));
+                var lambda = Expression.Lambda(condition, parameter);
+                builder.Entity(item.ClrType).HasQueryFilter(lambda);
+
+                //ÖRneğin;
+                // var prompts = await _dbContext.Prompts.ToListAsync() dediğimizde
+                // Select * from Prompts where IsActive = 1 sorgusunu üretir.
+
+            }
+
+            //Önce iki kolona göre indexleme işlemi yaptık yani sıralama işlemi yaptık daha sonrasında ise Unique olarak tanımladık iki kolonu birden. Yani bir kullanıcı aynı promptu bir daha favorilerine ekleyemez.
+            builder.Entity<Favorite>().HasIndex(f => new { f.AppUserId,f.PromptId}).IsUnique();
+
+            builder.Entity<Purchase>().HasIndex(x => new { x.AppUserId, x.PromptId, x.PurchaseDate });
+
+            base.OnModelCreating(builder);
+        }
+
+
+        //Yeni bir entity eklenmişse eklenme tarihini o anki tarih yapıyoruz. Eğer Entity güncellenmişse Güncelleme tarihini o anki tarih olarak güncelliyoruz.
+
+        //SaveChanges methodunu override ederek kaydedilme sırasında araya giriyoruz ve yapmak istediğimiz işlemleri yaparak kontrollerimize göre eğer yeni veri ekleniyorsa eklenme tarihini o an ki tarih yapıp IsActive kolonun değerini ise true olarak değiştiriyoruz, eğer veri Modified edilmişse yani güncellenecekse ozaman da UpdatedDate değerini o anki zaman ile güncelliyoruz.
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            // ChangeTracker.Entries<BaseEntity>() : Entity yi takip eder.
+            var entries = ChangeTracker.Entries<BaseEntity>();
+
+            foreach (var e in entries)
+            {
+                if(e.State == EntityState.Added)
+                {
+                    e.Entity.CreatedDate = DateTime.Now;
+                    e.Entity.IsActive = true;
+                }
+
+                if (e.State == EntityState.Modified)
+                    e.Entity.UpdatedDate = DateTime.Now;
+
+            }
+            return base.SaveChangesAsync(cancellationToken);
+        }
+
+        //DbSet = Tablo
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Favorite> Favorites { get; set; }
+        public DbSet<Payment> Payments { get; set; }
+        public DbSet<Prompt> Prompts { get; set; }
+        public DbSet<PromptCategory> PromptCategories { get; set; }
+        public DbSet<Purchase> Purchases { get; set; }
+        public DbSet<Subscription> Subscriptions { get; set; }
+
+
+
+    }
 }

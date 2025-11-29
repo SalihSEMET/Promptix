@@ -1,10 +1,21 @@
-﻿namespace Domain.Entities;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-public class PromptCategory : BaseEntity
+namespace Domain.Entities
 {
-    public int PromptId { get; set; }
-    public int CategoryId { get; set; }
-    //Navigation Properties
-    public Prompt Prompt { get; set; }
-    public Category Category { get; set; }
+    public class PromptCategory : BaseEntity
+    {
+        public int PromptId { get; set; }
+        public int CategoryId { get; set; }
+
+
+        // Navigation Properties
+        public Prompt Prompt { get; set; }
+        public Category Category { get; set; }
+
+
+    }
 }

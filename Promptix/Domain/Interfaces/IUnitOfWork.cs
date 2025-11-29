@@ -1,18 +1,26 @@
 ﻿using Domain.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Domain.Interfaces;
-
-public interface IUnitOfWork
+namespace Domain.Interfaces
 {
-    public IRepository<Prompt> Prompts { get;}
-    public IRepository<Category> Categories { get;}
-    public IRepository<Favorite> Favorites { get;}
-    public IRepository<Payment> Payments { get;}
-    public IRepository<Purchase> Purchases { get;}
-    public IRepository<Subscription> Subscriptions { get;}
-    public IRepository<PromptCategory> PromptCategories { get;}
-    Task<int> CompleteAsync();
-    Task BeginTransactionAsync();
-    Task CommitTransactionAsync();
-    Task RollbackTransactionAsync();
+    public interface IUnitOfWork
+    {
+        IRepository<Prompt> Prompts { get; }
+        IRepository<Category> Categories { get; }
+        IRepository<Favorite> Favorites { get; }
+        IRepository<Payment> Payments { get; }
+        IRepository<AuditLog> AuditLogs { get; }
+        IRepository<Purchase> Purchases { get;}
+        IRepository<Subscription> Subscriptions { get; }
+        IRepository<PromptCategory> PromptCategories { get; }
+        Task<int> CompleteAsync(bool transactionActive = true);
+        Task BeginTransactionAsync();
+        Task<int> CommitTransactionAsync();
+        Task RollbackTransactionAsync();
+
+    }
 }

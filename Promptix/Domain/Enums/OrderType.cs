@@ -1,7 +1,14 @@
-﻿namespace Domain.Enums;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-public enum OrderType
+namespace Domain.Enums
 {
-    Asc,
-    Desc
+    public enum OrderType
+    {
+        ASC,
+        DESC
+    }
 }

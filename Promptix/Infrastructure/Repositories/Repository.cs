@@ -1,7 +1,13 @@
 ﻿using Domain.Enums;
 using Domain.Interfaces;
+using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
 {
@@ -21,7 +27,7 @@ namespace Infrastructure.Repositories
 
         public async Task AddRangeAsync(IEnumerable<T> entities) => await dbSet.AddRangeAsync(entities);
 
-        public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate, OrderType orderBy = OrderType.Asc, params string[] include)
+        public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate, OrderType orderBy = OrderType.ASC, params string[] include)
         {
             IQueryable<T> query = dbSet.AsQueryable(); // Sorgu halinde henüz veritabanına sorgumuz gönderilmedi. Sorgu hazırlanma aşamasında kullanılır.
 
@@ -32,13 +38,13 @@ namespace Infrastructure.Repositories
                 query = query.Include(item);
             }
 
-            query = orderBy == OrderType.Asc ? query.OrderBy(x => x.Id) : query.OrderByDescending(x => x.Id);
+            query = orderBy == OrderType.ASC ? query.OrderBy(x => x.Id) : query.OrderByDescending(x => x.Id);
 
             return await query.ToListAsync(); // sorgu veritabanına göndertilir çalıştırılır ve sonuçlar döndürülür.
 
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> filter = null, OrderType orderBy = OrderType.Asc, params string[] include)
+        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> filter = null, OrderType orderBy = OrderType.ASC, params string[] include)
         {
             IQueryable<T> query = dbSet.AsQueryable();
 
@@ -51,7 +57,7 @@ namespace Infrastructure.Repositories
             }
 
             
-            query = orderBy==OrderType.Asc ? query.OrderBy(x=>x.Id) : query.OrderByDescending(x=>x.Id);
+            query = orderBy==OrderType.ASC ? query.OrderBy(x=>x.Id) : query.OrderByDescending(x=>x.Id);
 
 
             return await query.ToListAsync();
